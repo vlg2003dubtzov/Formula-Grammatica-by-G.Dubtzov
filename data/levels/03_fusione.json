@@ -1,9 +1,9 @@
 {
   "level_id": "fusione",
-  "title": "GP dell'Emilia-Romagna · Imola",
+  "title": "GP di Bologna",
   "topic": "Fusione: preposizione + articolo",
-  "intro": "Imola è la pista di casa mia! Qui ogni preposizione si fonde con l'articolo: di + il = del. Sotto la frase c'è l'aiuto.",
-  "billboards": ["DI + IL = DEL", "A + LA = ALLA", "IN + GLI = NEGLI", "DA + I = DAI", "IMOLA"],
+  "intro": "Bologna è la mia città! Qui ogni preposizione si fonde con l'articolo: di + il = del. Sotto la frase c'è l'aiuto.",
+  "billboards": ["DI + IL = DEL", "A + LA = ALLA", "IN + GLI = NEGLI", "DA + I = DAI", "BOLOGNA"],
   "questions": [
     {"sentence": "Questo è il libro ___ professore.", "hint": "di + il", "options": ["del", "dello", "dell'"], "correct": 0,
      "explain": "di + il = del."},

@@ -1,19 +1,47 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128">
-  <rect x="4" y="4" width="120" height="120" rx="24" fill="#3b3e45"/>
-  <rect x="4" y="4" width="14" height="120" fill="#d7261e"/>
-  <rect x="110" y="4" width="14" height="120" fill="#d7261e"/>
-  <rect x="44" y="10" width="4" height="22" fill="#fff" opacity="0.8"/>
-  <rect x="44" y="96" width="4" height="22" fill="#fff" opacity="0.8"/>
-  <rect x="80" y="10" width="4" height="22" fill="#fff" opacity="0.8"/>
-  <rect x="80" y="96" width="4" height="22" fill="#fff" opacity="0.8"/>
-  <g transform="translate(64 66) scale(0.78)">
+  <!-- Квадрат на весь размер: углы скругляет лаунчер или магазин. Болид — в
+       центральной безопасной зоне адаптивного значка Android (~78 px из 128). -->
+  <rect width="128" height="128" fill="#3b3e45"/>
+  <rect x="0" y="0" width="11" height="128" fill="#f5f5f5"/>
+  <rect x="117" y="0" width="11" height="128" fill="#f5f5f5"/>
+  <g fill="#d7261e">
+    <rect x="0" y="0" width="11" height="14"/>
+    <rect x="0" y="28" width="11" height="14"/>
+    <rect x="0" y="56" width="11" height="14"/>
+    <rect x="0" y="84" width="11" height="14"/>
+    <rect x="0" y="112" width="11" height="14"/>
+    <rect x="117" y="0" width="11" height="14"/>
+    <rect x="117" y="28" width="11" height="14"/>
+    <rect x="117" y="56" width="11" height="14"/>
+    <rect x="117" y="84" width="11" height="14"/>
+    <rect x="117" y="112" width="11" height="14"/>
+  </g>
+  <g fill="#ffffff" opacity="0.75">
+    <rect x="37" y="4" width="3" height="16"/>
+    <rect x="37" y="38" width="3" height="16"/>
+    <rect x="37" y="72" width="3" height="16"/>
+    <rect x="37" y="106" width="3" height="16"/>
+    <rect x="88" y="4" width="3" height="16"/>
+    <rect x="88" y="38" width="3" height="16"/>
+    <rect x="88" y="72" width="3" height="16"/>
+    <rect x="88" y="106" width="3" height="16"/>
+  </g>
+  <g transform="translate(64 64) scale(0.56)">
+    <g fill="#000000" opacity="0.3" transform="translate(5 8)">
+      <polygon points="-5,-66 5,-66 10,-30 13,-18 15,-6 27,2 28,30 16,40 10,54 -10,54 -16,40 -28,30 -27,2 -15,-6 -13,-18 -10,-30"/>
+      <rect x="-40" y="-72" width="80" height="10"/>
+      <rect x="-31" y="54" width="62" height="11"/>
+    </g>
     <rect x="-38" y="-52" width="14" height="26" fill="#1b1b1d"/>
     <rect x="24" y="-52" width="14" height="26" fill="#1b1b1d"/>
     <rect x="-41" y="18" width="17" height="32" fill="#1b1b1d"/>
     <rect x="24" y="18" width="17" height="32" fill="#1b1b1d"/>
-    <rect x="-40" y="-70" width="80" height="10" fill="#2a2c31"/>
+    <rect x="-40" y="-72" width="80" height="10" fill="#2a2c31"/>
+    <rect x="-40" y="-72" width="80" height="3" fill="#f2f2f2"/>
     <polygon fill="#d4110a" points="-5,-66 5,-66 10,-30 13,-18 15,-6 27,2 28,30 16,40 10,54 -10,54 -16,40 -28,30 -27,2 -15,-6 -13,-18 -10,-30"/>
     <polygon fill="#f2f2f2" points="-2,-66 2,-66 3,-18 -3,-18"/>
+    <polygon fill="#009246" points="19,5 25,7 25,28 19,31"/>
+    <polygon fill="#009246" points="-19,5 -25,7 -25,28 -19,31"/>
     <circle cx="0" cy="-6" r="10" fill="#101014"/>
     <circle cx="0" cy="-4" r="6.5" fill="#ffd400"/>
     <rect x="-31" y="54" width="62" height="11" fill="#2a2c31"/>

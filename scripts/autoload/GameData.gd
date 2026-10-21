@@ -60,10 +60,6 @@ func _notification(what: int) -> void:
 			Input.parse_input_event(ev)
 
 
-func is_touch() -> bool:
-	return DisplayServer.is_touchscreen_available()
-
-
 func pace_seconds() -> float:
 	return float(PACE_SECONDS[pace])
 

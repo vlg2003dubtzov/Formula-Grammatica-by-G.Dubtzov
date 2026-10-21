@@ -40,7 +40,7 @@ func _run() -> void:
 	var race: Node = load("res://scenes/Race.tscn").instantiate()
 	root.add_child(race)
 	await _wait(0.5)
-	race.hud.kimi.finish_typing()
+	race.hud.guide.finish_typing()
 	await _shot("04_intro")
 	race._start_lights()
 	await _wait(2.6)
@@ -66,7 +66,7 @@ func _run() -> void:
 			race.car.set_lane((int(race.question["correct"]) + 1) % 3)
 		await process_frame
 	await _wait(0.25)
-	race.hud.kimi.finish_typing()
+	race.hud.guide.finish_typing()
 	await _shot("08_errore")
 	await _wait(1.6)
 	await _shot("09_dopo_errore")

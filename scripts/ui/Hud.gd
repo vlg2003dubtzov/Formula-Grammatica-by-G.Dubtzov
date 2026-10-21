@@ -1,6 +1,6 @@
 class_name Hud
 extends CanvasLayer
-## Интерфейс гонки: карточка с фразой сверху, табло справа, Кими слева внизу,
+## Интерфейс гонки: карточка с фразой сверху, табло справа, пилот-ведущий слева внизу,
 ## стартовый светофор и крупные вспышки («VIA!», «NITRO!»).
 
 signal skip_intro
@@ -10,7 +10,7 @@ signal pause_pressed
 const CHIP_W := 180.0
 const CHIP_GAP := 10.0
 
-var kimi: KimiPanel
+var guide: GuidePanel
 var lights: StartLights
 
 var _root: Control
@@ -60,7 +60,7 @@ func _ready() -> void:
 	_root.add_child(_flash)
 	_build_card()
 	_build_stats()
-	_build_kimi()
+	_build_guide()
 	_build_lights()
 	_build_banner()
 	_build_buttons()
@@ -307,17 +307,17 @@ func _draw_lives() -> void:
 			_lives.draw_arc(c, 14.0, 0.0, TAU, 28, Color(1, 1, 1, 0.22), 2.0)
 
 
-# --- Кими, светофор, вспышки, кнопки ------------------------------------------
+# --- Ведущий, светофор, вспышки, кнопки ---------------------------------------
 
-func _build_kimi() -> void:
-	kimi = KimiPanel.new()
-	kimi.set_anchors_preset(Control.PRESET_BOTTOM_LEFT)
-	kimi.offset_left = 12
-	kimi.offset_right = 12 + 324
-	kimi.offset_top = -12 - 380
-	kimi.offset_bottom = -12
-	kimi.grow_vertical = Control.GROW_DIRECTION_BEGIN
-	_root.add_child(kimi)
+func _build_guide() -> void:
+	guide = GuidePanel.new()
+	guide.set_anchors_preset(Control.PRESET_BOTTOM_LEFT)
+	guide.offset_left = 12
+	guide.offset_right = 12 + 324
+	guide.offset_top = -12 - 380
+	guide.offset_bottom = -12
+	guide.grow_vertical = Control.GROW_DIRECTION_BEGIN
+	_root.add_child(guide)
 
 
 func _build_lights() -> void:

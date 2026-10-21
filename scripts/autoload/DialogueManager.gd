@@ -1,9 +1,9 @@
 extends Node
-## Реплики Кими — в data/dialogues/kimi.json. Ключ хранит список фраз: line()
+## Реплики пилота-ведущего — в data/dialogues/guida.json. Ключ хранит список фраз: line()
 ## берёт случайную (не ту же, что в прошлый раз), sequence() — все по порядку.
 ## {answer} и другие подстановки — через String.format.
 
-const PATH := "res://data/dialogues/kimi.json"
+const PATH := "res://data/dialogues/guida.json"
 
 var lines: Dictionary = {}
 var _last: Dictionary = {}
@@ -14,7 +14,7 @@ func _ready() -> void:
 	if data is Dictionary:
 		lines = data
 	else:
-		push_error("kimi.json не читается как JSON")
+		push_error("guida.json не читается как JSON")
 
 
 func sequence(key: String, vars: Dictionary = {}) -> Array[String]:

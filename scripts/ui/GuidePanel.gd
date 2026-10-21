@@ -1,7 +1,8 @@
-class_name KimiPanel
+class_name GuidePanel
 extends Control
-## Кими в левом нижнем углу: портрет-шлем, табличка с именем и облачко с
-## репликой, которая печатается по буквам.
+## Пилот-ведущий в левом нижнем углу: портрет-шлем, табличка с именем и облачко
+## с репликой, которая печатается по буквам. Имя и подпись — ключи «nome» и
+## «ruolo» в data/dialogues/guida.json.
 
 const TYPE_SPEED := 55.0  # букв в секунду
 
@@ -72,9 +73,9 @@ func _ready() -> void:
 	var plate := PanelContainer.new()
 	plate.add_theme_stylebox_override("panel", Ui.box(Ui.RED, Color(0, 0, 0, 0), 0, 0.25))
 	plate.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	plate.add_child(Ui.label("KIMI ANTONELLI", 22, Ui.WHITE, true))
+	plate.add_child(Ui.label(Dialogue.line("nome").to_upper(), 22, Ui.WHITE, true))
 	names.add_child(plate)
-	names.add_child(Ui.label("pilota · la tua guida", 16, Ui.GREY))
+	names.add_child(Ui.label(Dialogue.line("ruolo"), 16, Ui.GREY))
 	_speech.visible = false
 
 

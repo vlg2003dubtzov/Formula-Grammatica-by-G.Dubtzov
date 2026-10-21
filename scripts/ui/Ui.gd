@@ -11,7 +11,7 @@ const GREY := Color("9aa0aa")
 const AMBER := Color("ffc400")
 const NITRO := Color("35c8ff")
 const WRONG := Color("ff5a4f")
-const PANEL := Color(0.06, 0.07, 0.09, 0.96)
+const PANEL := Color(0.06, 0.07, 0.09, 1.0)
 
 ## Bahnschrift есть в каждой Windows 10/11 и похожа на шрифты гоночных трансляций.
 const FONT_NAMES := ["Bahnschrift", "Segoe UI", "Arial", "Helvetica", "Liberation Sans", "sans-serif"]

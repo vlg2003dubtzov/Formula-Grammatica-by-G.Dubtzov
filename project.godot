@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="Formula Grammatica"
-config/description="Gara di Formula 1 per imparare le preposizioni italiane."
+config/description="Gara di monoposto per imparare le preposizioni italiane."
 run/main_scene="res://scenes/Menu.tscn"
 config/features=PackedStringArray("4.7", "GL Compatibility")
 config/icon="res://icon.svg"

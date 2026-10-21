@@ -1,7 +1,7 @@
 extends Node2D
 ## Гонка — один уровень. Каждая арка на трассе задаёт один вопрос уровня.
 ## Машина едет сама; игрок только выбирает полосу с верным ответом.
-## Ход гонки: вступление Кими → светофор → вопросы → финиш (или сход) → итоги.
+## Ход гонки: вступление ведущего → светофор → вопросы → финиш (или сход) → итоги.
 
 enum State { INTRO, LIGHTS, RACING, FINISHING, OVER }
 
@@ -86,7 +86,7 @@ func _ready() -> void:
 	var own := str(level.get("intro", ""))
 	if own != "":
 		_intro.insert(1, own)
-	hud.kimi.say(_intro[0], true)
+	hud.guide.say(_intro[0], true)
 
 
 func _exit_tree() -> void:
@@ -194,12 +194,12 @@ func _drive(delta: float) -> void:
 # --- Вступление и старт -------------------------------------------------------
 
 func _next_intro() -> void:
-	if hud.kimi.is_typing():
-		hud.kimi.finish_typing()
+	if hud.guide.is_typing():
+		hud.guide.finish_typing()
 		return
 	_intro_i += 1
 	if _intro_i < _intro.size():
-		hud.kimi.say(_intro[_intro_i], true)
+		hud.guide.say(_intro[_intro_i], true)
 	else:
 		_start_lights()
 
@@ -209,7 +209,7 @@ func _start_lights() -> void:
 		return
 	state = State.LIGHTS
 	hud.intro_done()
-	hud.kimi.say(Dialogue.line("lights"), false, 3.0)
+	hud.guide.say(Dialogue.line("lights"), false, 3.0)
 	hud.lights.start()
 
 
@@ -217,7 +217,7 @@ func _go() -> void:
 	state = State.RACING
 	Sfx.play("go")
 	hud.banner("VIA!", Ui.GREEN_LIGHT)
-	hud.kimi.say(Dialogue.line("go"), false, 2.0)
+	hud.guide.say(Dialogue.line("go"), false, 2.0)
 	_next_question()
 
 
@@ -311,7 +311,7 @@ func _on_right() -> void:
 	if streak % NITRO_EVERY == 0:
 		_nitro()
 	else:
-		hud.kimi.say(Dialogue.line("correct"), false, 2.0)
+		hud.guide.say(Dialogue.line("correct"), false, 2.0)
 
 
 func _on_wrong(answer: String, chosen_word: String) -> void:
@@ -335,7 +335,7 @@ func _on_wrong(answer: String, chosen_word: String) -> void:
 		text += " " + why
 	if lives == 1:
 		text += " " + Dialogue.line("last_life")
-	hud.kimi.say(text, false, 6.0)
+	hud.guide.say(text, false, 6.0)
 
 
 func _nitro() -> void:
@@ -348,7 +348,7 @@ func _nitro() -> void:
 	hud.banner("NITRO!", Ui.NITRO)
 	hud.flash(Color(Ui.NITRO, 0.22))
 	_popup("NITRO +%d" % NITRO_BONUS, Ui.NITRO, -46.0)
-	hud.kimi.say(Dialogue.line("nitro"), false, 2.5)
+	hud.guide.say(Dialogue.line("nitro"), false, 2.5)
 
 
 # --- Конец гонки --------------------------------------------------------------
@@ -358,7 +358,7 @@ func _game_over() -> void:
 	question = {}
 	car.spin()
 	hud.set_distance(-1.0)
-	hud.kimi.say(Dialogue.line("game_over"), false, 30.0)
+	hud.guide.say(Dialogue.line("game_over"), false, 30.0)
 	get_tree().create_timer(2.2).timeout.connect(_show_results.bind(false))
 
 
@@ -367,7 +367,7 @@ func _finish() -> void:
 	Sfx.play("finish")
 	hud.banner("TRAGUARDO!", Ui.WHITE)
 	_burst([Color("009246"), Color.WHITE, Color("ce2b37")], 90)
-	hud.kimi.say(Dialogue.line("finish"), false, 30.0)
+	hud.guide.say(Dialogue.line("finish"), false, 30.0)
 	get_tree().create_timer(2.4).timeout.connect(_show_results.bind(true))
 
 

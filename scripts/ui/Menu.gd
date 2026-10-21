@@ -125,7 +125,7 @@ func _show_title() -> void:
 		col.add_child(Ui.button("Esci", get_tree().quit))
 	col.add_child(_spacer(10))
 	var hint := "Frecce o A D: cambia corsia   ·   Esc: pausa   ·   F11: schermo intero"
-	if GameData.is_touch():
+	if Ui.touch:
 		hint = "Tocca una corsia per cambiarla   ·   II: pausa"
 	var keys := Ui.label(hint, 16, Ui.GREY)
 	keys.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER

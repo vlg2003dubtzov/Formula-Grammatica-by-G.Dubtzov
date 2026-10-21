@@ -1,9 +1,9 @@
 {
   "level_id": "preposizioni_complesse",
-  "title": "GP della Toscana · Mugello",
+  "title": "GP di Firenze",
   "topic": "Preposizioni complesse",
-  "intro": "Al Mugello le curve sono difficili: preposizioni di due parole! Vicino a, lontano da, prima di... Attenzione alla seconda parte.",
-  "billboards": ["VICINO A", "LONTANO DA", "PRIMA DI", "DOPO", "MUGELLO"],
+  "intro": "A Firenze le curve sono difficili: preposizioni di due parole! Vicino a, lontano da, prima di... Attenzione alla seconda parte.",
+  "billboards": ["VICINO A", "LONTANO DA", "PRIMA DI", "DOPO", "FIRENZE"],
   "questions": [
     {"sentence": "Abito ___ stazione.", "options": ["vicino alla", "vicino della", "vicino nella"], "correct": 0,
      "explain": "Vicino a + la = vicino alla."},
@@ -39,7 +39,7 @@
      "explain": "«Secondo» + nome, senza altre preposizioni: secondo molti storici."},
     {"sentence": "___ un sistema nascosto, la pioggia non danneggia il Pantheon.", "options": ["Grazie a", "Grazie di", "Grazie per"], "correct": 0,
      "explain": "«Grazie a» = per merito di: grazie a un sistema nascosto."},
-    {"sentence": "Kimi corre ___ piloti più forti del mondo.", "options": ["insieme ai", "insieme dei", "insieme nei"], "correct": 0,
+    {"sentence": "Leo corre ___ piloti più forti del mondo.", "options": ["insieme ai", "insieme dei", "insieme nei"], "correct": 0,
      "explain": "Insieme a + i = insieme ai."}
   ]
 }

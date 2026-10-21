@@ -1,7 +1,9 @@
 {
-  "_info": "Battute di Kimi. Ogni chiave è una lista: «intro» si legge tutta in ordine, dalle altre il gioco sceglie una frase a caso. {answer} = la risposta giusta.",
+  "_info": "Battute del pilota che guida il giocatore (personaggio inventato). Ogni chiave è una lista: «intro» si legge tutta in ordine, dalle altre il gioco sceglie una frase a caso. {answer} = la risposta giusta.",
+  "nome": ["Leo Fulmine"],
+  "ruolo": ["pilota · la tua guida"],
   "intro": [
-    "Ciao! Sono Kimi Antonelli. Pronti per la gara di preposizioni? Accelera verso la risposta corretta!",
+    "Ciao! Sono Leo Fulmine, pilota e appassionato di grammatica. Pronti per la gara di preposizioni? Accelera verso la risposta corretta!",
     "La macchina va avanti da sola. Tu cambi corsia con le frecce o con A e D, oppure tocchi la corsia sullo schermo.",
     "In alto c'è una frase con uno spazio vuoto. Ogni corsia ha una risposta: scegli quella giusta prima della porta!",
     "Risposta giusta: punti e velocità. Risposta sbagliata: sbatti contro la barriera e perdi una vita.",
