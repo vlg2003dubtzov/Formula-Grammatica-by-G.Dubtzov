@@ -1,0 +1,6 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/race/AnswerGate.gd" id="1_gate"]
+
+[node name="AnswerGate" type="Node2D"]
+script = ExtResource("1_gate")

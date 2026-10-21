@@ -1,0 +1,39 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=5
+
+[application]
+
+config/name="Formula Grammatica"
+config/description="Gara di Formula 1 per imparare le preposizioni italiane."
+run/main_scene="res://scenes/Menu.tscn"
+config/features=PackedStringArray("4.7", "GL Compatibility")
+config/icon="res://icon.svg"
+config/quit_on_go_back=false
+
+[autoload]
+
+GameData="*res://scripts/autoload/GameData.gd"
+Dialogue="*res://scripts/autoload/DialogueManager.gd"
+Sfx="*res://scripts/autoload/Sfx.gd"
+
+[display]
+
+window/size/viewport_width=1280
+window/size/viewport_height=720
+window/stretch/mode="canvas_items"
+window/stretch/aspect="expand"
+window/handheld/orientation=4
+
+[rendering]
+
+renderer/rendering_method="gl_compatibility"
+renderer/rendering_method.mobile="gl_compatibility"
+textures/vram_compression/import_etc2_astc=true
+environment/defaults/default_clear_color=Color(0.07, 0.08, 0.1, 1)

@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128">
+  <rect x="4" y="4" width="120" height="120" rx="24" fill="#3b3e45"/>
+  <rect x="4" y="4" width="14" height="120" fill="#d7261e"/>
+  <rect x="110" y="4" width="14" height="120" fill="#d7261e"/>
+  <rect x="44" y="10" width="4" height="22" fill="#fff" opacity="0.8"/>
+  <rect x="44" y="96" width="4" height="22" fill="#fff" opacity="0.8"/>
+  <rect x="80" y="10" width="4" height="22" fill="#fff" opacity="0.8"/>
+  <rect x="80" y="96" width="4" height="22" fill="#fff" opacity="0.8"/>
+  <g transform="translate(64 66) scale(0.78)">
+    <rect x="-38" y="-52" width="14" height="26" fill="#1b1b1d"/>
+    <rect x="24" y="-52" width="14" height="26" fill="#1b1b1d"/>
+    <rect x="-41" y="18" width="17" height="32" fill="#1b1b1d"/>
+    <rect x="24" y="18" width="17" height="32" fill="#1b1b1d"/>
+    <rect x="-40" y="-70" width="80" height="10" fill="#2a2c31"/>
+    <polygon fill="#d4110a" points="-5,-66 5,-66 10,-30 13,-18 15,-6 27,2 28,30 16,40 10,54 -10,54 -16,40 -28,30 -27,2 -15,-6 -13,-18 -10,-30"/>
+    <polygon fill="#f2f2f2" points="-2,-66 2,-66 3,-18 -3,-18"/>
+    <circle cx="0" cy="-6" r="10" fill="#101014"/>
+    <circle cx="0" cy="-4" r="6.5" fill="#ffd400"/>
+    <rect x="-31" y="54" width="62" height="11" fill="#2a2c31"/>
+    <rect x="-29" y="56" width="19" height="7" fill="#009246"/>
+    <rect x="-10" y="56" width="20" height="7" fill="#f2f2f2"/>
+    <rect x="10" y="56" width="19" height="7" fill="#d4110a"/>
+  </g>
+</svg>

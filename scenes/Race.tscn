@@ -1,0 +1,23 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/race/Race.gd" id="1_race"]
+[ext_resource type="Script" path="res://scripts/race/Track.gd" id="2_track"]
+[ext_resource type="PackedScene" path="res://scenes/race/Car.tscn" id="3_car"]
+[ext_resource type="Script" path="res://scripts/ui/Hud.gd" id="4_hud"]
+
+[node name="Race" type="Node2D"]
+script = ExtResource("1_race")
+
+[node name="World" type="Node2D" parent="."]
+
+[node name="Track" type="Node2D" parent="World"]
+script = ExtResource("2_track")
+
+[node name="Gates" type="Node2D" parent="World"]
+
+[node name="Car" parent="World" instance=ExtResource("3_car")]
+
+[node name="Fx" type="Node2D" parent="World"]
+
+[node name="Hud" type="CanvasLayer" parent="."]
+script = ExtResource("4_hud")

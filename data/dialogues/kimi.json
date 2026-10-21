@@ -1,0 +1,55 @@
+{
+  "_info": "Battute di Kimi. Ogni chiave è una lista: «intro» si legge tutta in ordine, dalle altre il gioco sceglie una frase a caso. {answer} = la risposta giusta.",
+  "intro": [
+    "Ciao! Sono Kimi Antonelli. Pronti per la gara di preposizioni? Accelera verso la risposta corretta!",
+    "La macchina va avanti da sola. Tu cambi corsia con le frecce o con A e D, oppure tocchi la corsia sullo schermo.",
+    "In alto c'è una frase con uno spazio vuoto. Ogni corsia ha una risposta: scegli quella giusta prima della porta!",
+    "Risposta giusta: punti e velocità. Risposta sbagliata: sbatti contro la barriera e perdi una vita.",
+    "Tre risposte giuste di fila? NITRO! Guarda il semaforo: quando le luci si spengono, si parte!"
+  ],
+  "endless": [
+    "Gara infinita: tutte le preposizioni, una dopo l'altra. Quanto lontano arrivi?"
+  ],
+  "lights": [
+    "Occhi sul semaforo...",
+    "Concentrazione... aspetta le luci!"
+  ],
+  "go": [
+    "Via! Forza!",
+    "Si parte! Andiamo!",
+    "Via! Prima frase, prima curva!"
+  ],
+  "correct": [
+    "Perfetto!",
+    "Esatto!",
+    "Che bravura!",
+    "Giusto! Vai così!",
+    "Ottimo, che curva!",
+    "Sì! Che velocità!",
+    "Benissimo!",
+    "Fantastico!"
+  ],
+  "wrong": [
+    "Ahi! La risposta giusta è «{answer}».",
+    "Peccato! Ci voleva «{answer}».",
+    "Attenzione: qui serve «{answer}».",
+    "Quasi! La forma corretta è «{answer}»."
+  ],
+  "last_life": [
+    "Attenzione, è l'ultima vita!"
+  ],
+  "nitro": [
+    "Tre di fila: NITRO! Vai, vai, vai!",
+    "Nitro! Sei un fulmine!",
+    "Che serie! Nitro attivato!"
+  ],
+  "finish": [
+    "Traguardo! Che gara fantastica!",
+    "Bandiera a scacchi! Complimenti!",
+    "Traguardo raggiunto! Che pilota della grammatica!"
+  ],
+  "game_over": [
+    "Niente paura: anche i campioni sbagliano. Riproviamo?",
+    "Gara finita. Ripassa le frasi e riprova!"
+  ]
+}
