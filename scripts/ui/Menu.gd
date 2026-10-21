@@ -107,6 +107,7 @@ func _show_title() -> void:
 	top.add_theme_font_override("font", Ui.title)
 	top.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	col.add_child(top)
+	top.add_child(SplashText.new("Developed by Grigory Dubtzov"))
 	var bottom := Ui.label("GRAMMATICA", 92, Ui.RED)
 	bottom.add_theme_font_override("font", Ui.title)
 	bottom.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
