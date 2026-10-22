@@ -122,9 +122,14 @@ func show_question(q: Dictionary) -> void:
 	_card.visible = true
 	_answer = -1
 	_chosen = -1
-	_sentence.text = "[center]%s[/center]" % Ui.blank(str(q["sentence"]))
+	var sentence := str(q["sentence"])
+	# длинные фразы (косвенная речь) мельче, чтобы карточка не закрывала трассу
+	var size := 30 if sentence.length() <= 48 else (26 if sentence.length() <= 72 else 22)
+	_sentence.add_theme_font_size_override("normal_font_size", size)
+	_sentence.add_theme_font_size_override("bold_font_size", size)
+	_sentence.text = "[center]%s[/center]" % Ui.blank(sentence)
 	var hint := str(q.get("hint", ""))
-	_hint.text = hint + " = ?" if hint != "" else ""
+	_hint.text = hint
 	_hint.visible = hint != ""
 	var opts: Array = q["options"]
 	for i in Track.LANES:

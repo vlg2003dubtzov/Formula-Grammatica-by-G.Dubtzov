@@ -139,6 +139,13 @@ func _text(parent: Control, text: String, pos: Vector2, size: int, colour: Color
 	parent.add_child(l)
 
 
+func _level(id: String) -> Dictionary:
+	for l: Dictionary in _gd.levels:
+		if l["id"] == id:
+			return l
+	return _gd.levels[0]
+
+
 ## Скриншоты из настоящей игры.
 func _screens() -> void:
 	var menu: Node = load("res://scenes/Menu.tscn").instantiate()
@@ -147,7 +154,7 @@ func _screens() -> void:
 	await _shot("screen_1_menu.png")
 	menu._show_levels()
 	await _wait(0.4)
-	await _shot("screen_2_gran_premi.png")
+	await _shot("screen_2_campionati.png")
 	menu.queue_free()
 
 	_gd.selected = _gd.levels[0]
@@ -189,7 +196,7 @@ func _screens() -> void:
 	await _shot("screen_7_traguardo.png")
 	race.queue_free()
 
-	_gd.selected = _gd.levels[2]
+	_gd.selected = _level("fusione")
 	race = load("res://scenes/Race.tscn").instantiate()
 	root.add_child(race)
 	await _wait(0.3)

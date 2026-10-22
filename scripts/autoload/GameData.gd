@@ -1,10 +1,14 @@
 extends Node
 ## Уровни, настройки и рекорды.
 ##
-## Уровень — JSON-файл в res://data/levels (формат — в README). В собранной игре
-## учитель может положить свои уровни в папку «livelli» рядом с .exe.
+## Уровень — JSON-файл в res://data/levels (формат — в README). Уровни собраны в
+## чемпионаты (data/campionati.json, поле «campionato» уровня). В собранной игре
+## учитель может положить свои уровни в папку «livelli» рядом с .exe; уровни без
+## известного чемпионата попадают в «Altre gare».
 
 const LEVELS_DIR := "res://data/levels"
+const CAMPIONATI_PATH := "res://data/campionati.json"
+const OTHER := "altro"
 const EXTRA_DIR := "livelli"
 const SETTINGS_PATH := "user://impostazioni.cfg"
 const RECORDS_PATH := "user://record.json"
@@ -15,10 +19,12 @@ const LIVES_NAMES := ["3 vite", "5 vite", "Illimitate (allenamento)"]
 const LIVES_VALUES := [3, 5, -1]
 
 var levels: Array[Dictionary] = []
+var campionati: Array[Dictionary] = []
 ## Уровень, который выбран в меню; гонка берёт его отсюда.
 var selected: Dictionary = {}
-## Какую страницу меню открыть при возврате из гонки.
+## Какую страницу меню открыть при возврате из гонки и какой чемпионат в ней.
 var menu_page := "title"
+var menu_group := ""
 
 var pace := 1
 var lives_option := 0
@@ -80,21 +86,60 @@ func load_levels() -> void:
 		var level := read_level(path)
 		if not level.is_empty():
 			levels.append(level)
+	_load_campionati()
 
 
-## Бесконечная гонка: все вопросы всех уровней вперемешку.
-func endless_level() -> Dictionary:
-	var all: Array[Dictionary] = []
+func _load_campionati() -> void:
+	campionati.clear()
+	var data: Variant = null
+	if FileAccess.file_exists(CAMPIONATI_PATH):
+		data = JSON.parse_string(FileAccess.get_file_as_string(CAMPIONATI_PATH))
+	if data is Dictionary:
+		for c: Variant in (data as Dictionary).get("campionati", []):
+			if c is Dictionary and (c as Dictionary).has("id"):
+				campionati.append(c)
+	var known: Array[String] = []
+	for c in campionati:
+		known.append(str(c["id"]))
+	var orphans := false
 	for level in levels:
+		if not str(level["campionato"]) in known:
+			level["campionato"] = OTHER
+			orphans = true
+	if orphans:
+		campionati.append({"id": OTHER, "title": "Altre gare", "subtitle": "Livelli aggiunti dall'insegnante"})
+
+
+func levels_of(campionato: String) -> Array[Dictionary]:
+	var out: Array[Dictionary] = []
+	for level in levels:
+		if campionato == "" or str(level["campionato"]) == campionato:
+			out.append(level)
+	return out
+
+
+func campionato(id: String) -> Dictionary:
+	for c in campionati:
+		if str(c["id"]) == id:
+			return c
+	return {}
+
+
+## Бесконечная гонка: все вопросы чемпионата (или всей игры) вперемешку.
+func endless_level(id := "") -> Dictionary:
+	var all: Array[Dictionary] = []
+	for level in levels_of(id):
 		var list: Array = level["questions"]
 		for q: Dictionary in list:
 			all.append(q)
+	var c := campionato(id)
 	return {
-		"id": "gara_infinita",
+		"id": "gara_infinita" + ("_" + id if id != "" else ""),
 		"title": "Gara infinita",
-		"topic": "Tutte le preposizioni",
+		"topic": str(c.get("subtitle", "Tutta la grammatica")) if not c.is_empty() else "Tutta la grammatica",
 		"intro": Dialogue.line("endless"),
 		"questions": all,
+		"campionato": id,
 		"endless": true,
 	}
 
@@ -118,6 +163,8 @@ func read_level(path: String) -> Dictionary:
 	if not data is Dictionary:
 		push_warning("%s: файл не читается как JSON" % path)
 		return {}
+	if OS.has_feature("web"):
+		data = _web_safe(data)
 	var level: Dictionary = data
 	var good: Array[Dictionary] = []
 	var list: Variant = level.get("questions", [])
@@ -137,7 +184,22 @@ func read_level(path: String) -> Dictionary:
 	level["id"] = str(level.get("level_id", path.get_file().get_basename()))
 	level["title"] = str(level.get("title", level["id"]))
 	level["topic"] = str(level.get("topic", ""))
+	level["campionato"] = str(level.get("campionato", OTHER))
 	return level
+
+
+## В браузере нет системных шрифтов, а во встроенном нет стрелки «→».
+func _web_safe(v: Variant) -> Variant:
+	if v is String:
+		return (v as String).replace("→", "—")
+	if v is Array:
+		return (v as Array).map(_web_safe)
+	if v is Dictionary:
+		var d: Dictionary = v
+		for k: Variant in d.keys():
+			d[k] = _web_safe(d[k])
+		return d
+	return v
 
 
 ## Пустая строка — вопрос годен; иначе — что с ним не так.

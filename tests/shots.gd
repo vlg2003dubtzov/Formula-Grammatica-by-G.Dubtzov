@@ -18,6 +18,13 @@ func _shot(name: String) -> void:
 	print("shot ", name)
 
 
+func _level(gd: Node, id: String) -> Dictionary:
+	for l: Dictionary in gd.levels:
+		if l["id"] == id:
+			return l
+	return gd.levels[0]
+
+
 func _wait(sec: float) -> void:
 	await create_timer(sec).timeout
 
@@ -83,7 +90,7 @@ func _run() -> void:
 	race.queue_free()
 
 	# слияние: подсказка под фразой
-	gd.selected = gd.levels[2]
+	gd.selected = _level(gd, "fusione")
 	race = load("res://scenes/Race.tscn").instantiate()
 	root.add_child(race)
 	await _wait(0.3)
@@ -104,7 +111,7 @@ func _run() -> void:
 	race._pause() # не должно открыться после схода
 	race.queue_free()
 
-	gd.selected = gd.levels[3]
+	gd.selected = _level(gd, "preposizioni_complesse")
 	race = load("res://scenes/Race.tscn").instantiate()
 	root.add_child(race)
 	await _wait(0.3)

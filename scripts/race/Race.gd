@@ -69,9 +69,12 @@ func _ready() -> void:
 	lives = GameData.start_lives()
 	questions = _shuffled(level["questions"])
 	var boards: Variant = level.get("billboards")
+	var list: Array[String] = []
 	if boards is Array and not (boards as Array).is_empty():
-		var list: Array[String] = []
 		list.assign(boards)
+	else:
+		list = _answer_boards()
+	if not list.is_empty():
 		track.billboards = list
 	get_viewport().size_changed.connect(_fit)
 	_fit()
@@ -236,6 +239,23 @@ func _shuffled(source: Array) -> Array[Dictionary]:
 		item["correct"] = options.find(answer)
 		out.append(item)
 	out.shuffle()
+	return out
+
+
+## Щиты вдоль трассы для уровня без своих надписей: верные ответы по три.
+func _answer_boards() -> Array[String]:
+	var words: Array[String] = []
+	for q in questions:
+		var opts: Array = q["options"]
+		var word := str(opts[int(q["correct"])]).to_upper()
+		if word.length() <= 12 and not word in words:
+			words.append(word)
+		if words.size() >= 12:
+			break
+	var out: Array[String] = []
+	for i in range(0, words.size() - 2, 3):
+		out.append(" · ".join(words.slice(i, i + 3)))
+	out.append("FORZA!")
 	return out
 
 
@@ -405,6 +425,7 @@ func _restart() -> void:
 
 func _to_menu(page: String) -> void:
 	GameData.menu_page = page
+	GameData.menu_group = str(level.get("campionato", ""))
 	get_tree().change_scene_to_file(MENU_SCENE)
 
 

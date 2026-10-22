@@ -29,7 +29,9 @@ func _ready() -> void:
 	get_viewport().size_changed.connect(_fit)
 	_fit()
 	Sfx.engine(false)
-	if GameData.menu_page == "levels":
+	if GameData.menu_page == "levels" and GameData.menu_group != "":
+		_show_races(GameData.menu_group)
+	elif GameData.menu_page == "levels":
 		_show_levels()
 	else:
 		_show_title()
@@ -65,7 +67,10 @@ func _fit() -> void:
 func _back() -> void:
 	if _page_name == "settings":
 		GameData.save_settings()
-	_show_title()
+	if _page_name == "races":
+		_show_levels()
+	else:
+		_show_title()
 
 
 # --- Страницы -----------------------------------------------------------------
@@ -113,7 +118,7 @@ func _show_title() -> void:
 	bottom.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	bottom.add_theme_constant_override("line_spacing", -20)
 	col.add_child(bottom)
-	var sub := Ui.label("Il Gran Premio delle preposizioni italiane", 24, Ui.GREY)
+	var sub := Ui.label("Il Gran Premio della grammatica italiana", 24, Ui.GREY)
 	sub.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	col.add_child(sub)
 	col.add_child(_spacer(18))
@@ -133,34 +138,32 @@ func _show_title() -> void:
 	start.grab_focus.call_deferred()
 
 
+## Первая ступень выбора: чемпионаты (разделы грамматики).
 func _show_levels() -> void:
-	var col := _new_page("levels", 700)
-	_heading(col, "Scegli il Gran Premio")
-	var sub := Ui.label("Ogni Gran Premio è un argomento, ogni porta sulla pista è una domanda.", 18, Ui.GREY)
+	var col := _new_page("levels", 720)
+	_heading(col, "Scegli il campionato")
+	var sub := Ui.label("Ogni campionato è una parte della grammatica, ogni gara è un argomento.", 18, Ui.GREY)
 	sub.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	col.add_child(sub)
-	var scroll := ScrollContainer.new()
-	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-	scroll.custom_minimum_size = Vector2(700, mini(440, (GameData.levels.size() + 1) * 86))
-	col.add_child(scroll)
-	# поля, чтобы скошенные углы кнопок не обрезались краем прокрутки
-	var margin := MarginContainer.new()
-	margin.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	margin.add_theme_constant_override("margin_left", 14)
-	margin.add_theme_constant_override("margin_right", 14)
-	margin.add_theme_constant_override("margin_top", 4)
-	scroll.add_child(margin)
-	var list := VBoxContainer.new()
-	list.add_theme_constant_override("separation", 10)
-	margin.add_child(list)
+	var list := _scroll_list(col, GameData.campionati.size() + 1)
 	var first: Button = null
-	for level in GameData.levels:
-		var b := _level_button(level)
+	for c in GameData.campionati:
+		var id := str(c["id"])
+		var races := GameData.levels_of(id)
+		if races.is_empty():
+			continue
+		var done := 0
+		for r in races:
+			if GameData.record(str(r["id"])) > 0:
+				done += 1
+		var b := _row_button(str(c["title"]), str(c.get("subtitle", "")),
+			"%d gare\nfinite: %d" % [races.size(), done], _show_races.bind(id))
 		list.add_child(b)
 		if first == null:
 			first = b
 	if not GameData.levels.is_empty():
-		list.add_child(_level_button(GameData.endless_level()))
+		var all := GameData.endless_level()
+		list.add_child(_row_button("Gara infinita", "Tutta la grammatica, senza fine", _record_text(all), _start.bind(all)))
 	else:
 		list.add_child(Ui.label("Nessun livello trovato in data/levels.", 20, Ui.WRONG))
 	var back := Ui.button("Indietro", _back)
@@ -171,11 +174,67 @@ func _show_levels() -> void:
 		back.grab_focus.call_deferred()
 
 
+## Вторая ступень: заезды одного чемпионата.
+func _show_races(id: String) -> void:
+	var races := GameData.levels_of(id)
+	if races.is_empty():
+		_show_levels()
+		return
+	GameData.menu_group = id
+	var c := GameData.campionato(id)
+	var col := _new_page("races", 720)
+	_heading(col, str(c.get("title", "Gare")), 40)
+	var sub := Ui.label(str(c.get("subtitle", "")), 18, Ui.GREY)
+	sub.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	col.add_child(sub)
+	var list := _scroll_list(col, races.size() + 1)
+	var first: Button = null
+	for level in races:
+		var b := _level_button(level)
+		list.add_child(b)
+		if first == null:
+			first = b
+	list.add_child(_level_button(GameData.endless_level(id)))
+	col.add_child(Ui.button("Indietro", _back))
+	first.grab_focus.call_deferred()
+
+
+## Прокручиваемый список кнопок; поля — чтобы скошенные углы не обрезались.
+func _scroll_list(col: VBoxContainer, rows: int) -> VBoxContainer:
+	var scroll := ScrollContainer.new()
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	scroll.custom_minimum_size = Vector2(720, mini(440, rows * 86))
+	col.add_child(scroll)
+	var margin := MarginContainer.new()
+	margin.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	margin.add_theme_constant_override("margin_left", 14)
+	margin.add_theme_constant_override("margin_right", 14)
+	margin.add_theme_constant_override("margin_top", 4)
+	scroll.add_child(margin)
+	var list := VBoxContainer.new()
+	list.add_theme_constant_override("separation", 10)
+	margin.add_child(list)
+	return list
+
+
 func _level_button(level: Dictionary) -> Button:
+	var count: Array = level["questions"]
+	var endless := bool(level.get("endless", false))
+	var info := ("senza fine" if endless else "%d domande" % count.size()) + "\n" + _record_text(level)
+	return _row_button(str(level["title"]), str(level["topic"]), info, _start.bind(level))
+
+
+func _record_text(level: Dictionary) -> String:
+	var best := GameData.record(str(level["id"]))
+	return "Record: %d" % best if best > 0 else "Record: —"
+
+
+## Широкая кнопка: слева заголовок и подпись, справа сведения.
+func _row_button(title: String, topic: String, info_text: String, on_press: Callable) -> Button:
 	var b := Button.new()
-	b.custom_minimum_size = Vector2(660, 76)
+	b.custom_minimum_size = Vector2(680, 76)
 	b.pressed.connect(func() -> void: Sfx.play("click"))
-	b.pressed.connect(_start.bind(level))
+	b.pressed.connect(on_press)
 	var row := HBoxContainer.new()
 	row.set_anchors_preset(Control.PRESET_FULL_RECT)
 	row.offset_left = 30
@@ -188,13 +247,10 @@ func _level_button(level: Dictionary) -> Button:
 	names.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	names.add_theme_constant_override("separation", 0)
 	row.add_child(names)
-	names.add_child(Ui.label(str(level["title"]), 24, Ui.WHITE, true))
-	names.add_child(Ui.label(str(level["topic"]), 18, Color(1, 1, 1, 0.72)))
-	var count: Array = level["questions"]
-	var endless := bool(level.get("endless", false))
-	var best := GameData.record(str(level["id"]))
-	var info_text := ("senza fine" if endless else "%d domande" % count.size())
-	info_text += "\nRecord: %d" % best if best > 0 else "\nRecord: —"
+	names.add_child(Ui.label(title, 24, Ui.WHITE, true))
+	var topic_label := Ui.label(topic, 18, Color(1, 1, 1, 0.72))
+	topic_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	names.add_child(topic_label)
 	var info := Ui.label(info_text, 16, Color(1, 1, 1, 0.72))
 	info.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	info.size_flags_vertical = Control.SIZE_SHRINK_CENTER
