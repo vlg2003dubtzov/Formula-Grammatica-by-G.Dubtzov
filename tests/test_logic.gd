@@ -89,6 +89,33 @@ func _run() -> void:
 	menu._back()
 	await process_frame
 	_check(menu._page_name == "levels", "menu: indietro ai campionati")
+	_check(_locked(menu).size() == 0, "versione completa: niente lucchetti")
+
+	# --- demo: aperto solo il primo campionato e la sua gara infinita ---
+	_check(gd.demo == false, "senza la feature «demo» la versione è completa")
+	gd.demo = true
+	var first_id: String = gd.campionati[0]["id"]
+	_check(gd.is_open(first_id), "demo: %s aperto" % first_id)
+	_check(gd.is_open(gd.endless_level(first_id)["campionato"]), "demo: gara infinita di %s aperta" % first_id)
+	_check(not gd.is_open(""), "demo: gara infinita generale chiusa")
+	var closed := 0
+	for c: Dictionary in gd.campionati:
+		if not gd.is_open(c["id"]):
+			closed += 1
+	_check(closed == gd.campionati.size() - 1, "demo: chiusi gli altri %d campionati" % closed)
+	menu._show_levels()
+	await process_frame
+	_check(_locked(menu).size() == gd.campionati.size(), "demo: %d righe col lucchetto" % _locked(menu).size())
+	menu._show_races("c6")
+	await process_frame
+	_check(menu._page_name == "levels", "demo: il campionato 6 non si apre")
+	menu._show_races(first_id)
+	await process_frame
+	_check(menu._page_name == "races" and _locked(menu).is_empty(), "demo: gare di %s aperte" % first_id)
+	gd.selected = {}
+	menu._start(_level(gd, "imperfetto"))
+	_check(gd.selected.is_empty(), "demo: una gara chiusa non parte")
+	gd.demo = false
 	menu.queue_free()
 	await process_frame
 
@@ -124,6 +151,15 @@ func _run() -> void:
 	Engine.time_scale = 1.0
 	print("--- %s ---" % ("TUTTO OK" if _fails == 0 else "%d ERRORI" % _fails))
 	quit(_fails)
+
+
+## Кнопки под замком на текущей странице меню.
+func _locked(menu: Node) -> Array[Button]:
+	var out: Array[Button] = []
+	for b: Node in menu._page.find_children("*", "Button", true, false):
+		if (b as Button).disabled:
+			out.append(b as Button)
+	return out
 
 
 func _has_results(race: Node) -> bool:

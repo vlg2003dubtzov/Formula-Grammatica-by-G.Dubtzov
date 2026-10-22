@@ -3,6 +3,8 @@ extends Control
 ## те же Track и Car, что в гонке.
 
 const RACE_SCENE := "res://scenes/Race.tscn"
+## Подпись у закрытых в демо строк.
+const DEMO_LOCK := "Nella versione completa\nsul sito OLAM"
 
 var _backdrop: Node2D
 var _track: Track
@@ -121,6 +123,10 @@ func _show_title() -> void:
 	var sub := Ui.label("Il Gran Premio della grammatica italiana", 24, Ui.GREY)
 	sub.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	col.add_child(sub)
+	if GameData.demo:
+		var demo := Ui.label("Demo gratuita · il gioco completo è sul sito OLAM", 18, Ui.AMBER, true)
+		demo.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		col.add_child(demo)
 	col.add_child(_spacer(18))
 	var start := Ui.button("Inizia la Corsa", _show_levels, 28)
 	start.custom_minimum_size.y = 66
@@ -150,6 +156,10 @@ func _show_levels() -> void:
 	for c in GameData.campionati:
 		var id := str(c["id"])
 		var races := GameData.levels_of(id)
+		if not GameData.is_open(id):
+			# в пакет демо заезды закрытых чемпионатов не входят: строка — из campionati.json
+			list.add_child(_locked_row(str(c["title"]), str(c.get("subtitle", ""))))
+			continue
 		if races.is_empty():
 			continue
 		var done := 0
@@ -161,11 +171,13 @@ func _show_levels() -> void:
 		list.add_child(b)
 		if first == null:
 			first = b
-	if not GameData.levels.is_empty():
+	if GameData.levels.is_empty():
+		list.add_child(Ui.label("Nessun livello trovato in data/levels.", 20, Ui.WRONG))
+	elif not GameData.is_open(""):
+		list.add_child(_locked_row("Gara infinita", "Tutta la grammatica, senza fine"))
+	else:
 		var all := GameData.endless_level()
 		list.add_child(_row_button("Gara infinita", "Tutta la grammatica, senza fine", _record_text(all), _start.bind(all)))
-	else:
-		list.add_child(Ui.label("Nessun livello trovato in data/levels.", 20, Ui.WRONG))
 	var back := Ui.button("Indietro", _back)
 	col.add_child(back)
 	if first:
@@ -177,7 +189,7 @@ func _show_levels() -> void:
 ## Вторая ступень: заезды одного чемпионата.
 func _show_races(id: String) -> void:
 	var races := GameData.levels_of(id)
-	if races.is_empty():
+	if races.is_empty() or not GameData.is_open(id):
 		_show_levels()
 		return
 	GameData.menu_group = id
@@ -258,6 +270,34 @@ func _row_button(title: String, topic: String, info_text: String, on_press: Call
 	return b
 
 
+## Строка под замком (демо): видно, что есть в полной версии, но нажать нельзя.
+func _locked_row(title: String, topic: String) -> Button:
+	var b := _row_button(title, topic, DEMO_LOCK, func() -> void: pass)
+	b.disabled = true
+	b.focus_mode = Control.FOCUS_NONE
+	var row := b.get_child(0) as HBoxContainer
+	(row.get_child(0) as Control).modulate.a = 0.5
+	(row.get_child(1) as Label).add_theme_color_override("font_color", Ui.AMBER)
+	row.add_child(_padlock())
+	return b
+
+
+## Замок рисуется: во встроенном веб-шрифте нет значка 🔒.
+func _padlock() -> Control:
+	var lock := Control.new()
+	lock.custom_minimum_size = Vector2(26, 32)
+	lock.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	lock.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	lock.draw.connect(func() -> void:
+		lock.draw_arc(Vector2(13, 12), 7.0, PI, TAU, 16, Ui.AMBER, 3.0, true)
+		lock.draw_line(Vector2(6, 12), Vector2(6, 16), Ui.AMBER, 3.0)
+		lock.draw_line(Vector2(20, 12), Vector2(20, 16), Ui.AMBER, 3.0)
+		lock.draw_rect(Rect2(2, 15, 22, 16), Ui.AMBER)
+		lock.draw_circle(Vector2(13, 21), 2.5, Ui.PANEL)
+		lock.draw_rect(Rect2(12, 21, 2, 5), Ui.PANEL))
+	return lock
+
+
 func _show_settings() -> void:
 	var col := _new_page("settings", 640)
 	_heading(col, "Impostazioni")
@@ -326,5 +366,7 @@ func _spacer(h: float) -> Control:
 
 
 func _start(level: Dictionary) -> void:
+	if not GameData.is_open(str(level.get("campionato", ""))):
+		return
 	GameData.selected = level
 	get_tree().change_scene_to_file(RACE_SCENE)

@@ -132,7 +132,8 @@ godot --headless --path . -s res://tests/test_logic.gd
 
 Тест проверяет, что все скрипты компилируются, все 41 заезд читаются (у
 каждого не меньше 12 вопросов, свой чемпионат, объяснения, без повторов фраз) и
-меню переходит от чемпионатов к заездам и обратно. Потом он гоняет три гонки:
+меню переходит от чемпионатов к заездам и обратно, а в демо открыт только
+первый чемпионат и закрытое не запускается. Потом он гоняет три гонки:
 финиш с двумя ошибками (там же проверяет очки и нитро), сход после трёх ошибок
 и 90 вопросов бесконечной гонки. Файлы игрока тест не трогает: при запуске с
 `-s` игра ничего не записывает.
@@ -144,7 +145,18 @@ godot --headless --path . -s res://tests/test_logic.gd
 ```
 godot --headless --path . --export-release "Windows" build/FormulaGrammatica.exe
 godot --headless --path . --export-release "Web" build/web/index.html
+godot --headless --path . --export-release "Web Demo" build/web-demo/index.html
 ```
+
+**Демо для сайта OLAM** — пресет «Web Demo»: веб-сборка с feature-тегом `demo`
+(`GameData.demo`). В ней открыт только первый чемпионат из `campionati.json` и его
+бесконечная гонка; остальные чемпионаты и общая бесконечная гонка видны в меню
+под замком с подписью «Nella versione completa sul sito OLAM». Заезды закрытых
+чемпионатов (`data/levels/c2_*` … `c8_*`) в пакет демо не входят — новый
+чемпионат надо дописать в `exclude_filter` пресета. Сборка без потоков, поэтому
+идёт на любом статическом хостинге (GitHub Pages) без заголовков COOP/COEP.
+Готовую папку `build/web-demo/` копируют в `assets/games/formula-grammatica/`
+сайта OLAM.
 
 **Android (APK).** Для сборки нужны Android-шаблоны Godot, Java 17 и Android SDK
 (`platform-tools`, `build-tools`). Пути к ним указываются в настройках редактора:

@@ -35,6 +35,10 @@ var records: Dictionary = {}
 ## Запуски с -s (тесты, инструменты) читают файлы игрока, но не пишут их.
 var persist := true
 
+## Демо (feature-тег «demo», пресет «Web Demo»): открыт только первый чемпионат
+## и его бесконечная гонка, остальное видно в меню под замком.
+var demo := OS.has_feature("demo")
+
 
 func _ready() -> void:
 	var args := OS.get_cmdline_args()
@@ -123,6 +127,14 @@ func campionato(id: String) -> Dictionary:
 		if str(c["id"]) == id:
 			return c
 	return {}
+
+
+## Можно ли ехать в чемпионате ("" — общая бесконечная гонка). Закрыто
+## что-то только в демо: там открыт лишь первый чемпионат из campionati.json.
+func is_open(campionato_id: String) -> bool:
+	if not demo:
+		return true
+	return not campionati.is_empty() and str(campionati[0]["id"]) == campionato_id
 
 
 ## Бесконечная гонка: все вопросы чемпионата (или всей игры) вперемешку.
